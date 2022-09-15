@@ -144,6 +144,20 @@ test('blog with no title or url gives 404', async () => {
         .expect(400)
 })
 
+test('remove a given blog post', async () => {
+    const blogToDelete = initialBlogs[0]
+
+    await api
+        .delete(`/api/blogs/${blogToDelete._id}`)
+        .expect(204)
+
+    const blogs = await Blog.find({})
+    expect(blogs).toHaveLength(initialBlogs.length - 1)
+
+    const url = blogs.map(blog => blog.url)
+    expect(url).not.toContain(blogToDelete.url)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
