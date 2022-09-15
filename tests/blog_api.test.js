@@ -158,6 +158,21 @@ test('remove a given blog post', async () => {
     expect(url).not.toContain(blogToDelete.url)
 })
 
+test('update likes on a given blog post', async () => {
+    const blogToUpdate = initialBlogs[0]
+
+    const newLikes = {
+        likes: 100
+    }
+
+    const updatedBlog = await api
+        .put(`/api/blogs/${blogToUpdate._id}`)
+        .send(newLikes)
+        
+    expect(updatedBlog.body.likes).toEqual(100)
+
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
